@@ -1,0 +1,16 @@
+# cmake files
+cmake_install.cmake
+CTestTestfile.cmake
+CMakeFiles/
+CMakeCache.txt
+Makefile
+
+# generated files
+gforticlient
+src/*.c
+src/views/*.c
+src/*.h
+src/gforticlient.vapi
+src/gforticlient_internal.h
+src/libgforticlient-clib.a
+

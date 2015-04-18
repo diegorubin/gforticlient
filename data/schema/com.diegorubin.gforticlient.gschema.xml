@@ -1,0 +1,12 @@
+<schemalist>
+  <schema id="com.diegorubin.gforticlient" path="/com/diegorubin/gforticlient/" gettext-domain="gforticlient">
+
+    <key name="path" type="s">
+      <default l10n="messages">""</default>
+      <summary>Path for FortiClientCLI</summary>
+      <description>
+      </description>
+    </key>
+
+  </schema>
+</schemalist>
