@@ -1,19 +1,18 @@
 #include "window.h"
 
-const char *fifo = "/tmp/gfrontfile";
-
 GtkWidget *create_main_window()
 {
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), "GFortiClient");
     gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER_ALWAYS);
-    gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
-    gtk_container_set_border_width(GTK_CONTAINER(window),5);
+    gtk_window_set_default_size(GTK_WINDOW(window), 150, 150);
+    gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+    gtk_container_set_border_width(GTK_CONTAINER(window),20);
 
-    GtkWidget *vbxWindow = gtk_vbox_new (FALSE, 0);
-    GtkWidget *tblMenu = gtk_table_new(4,2,FALSE);
-
-    gtk_box_pack_start (GTK_BOX (vbxWindow),tblMenu, FALSE, FALSE, 0); 
+    GtkWidget *grdMenu = gtk_grid_new();
+    gtk_grid_set_row_homogeneous(GTK_GRID(grdMenu), TRUE);
+    gtk_grid_set_column_homogeneous(GTK_GRID(grdMenu), FALSE);
+    gtk_grid_set_column_spacing(GTK_GRID(grdMenu), 10);
 
     lblUser = gtk_label_new("User:");
     entUser = gtk_entry_new();
@@ -27,27 +26,19 @@ GtkWidget *create_main_window()
     lblPort = gtk_label_new("Port:");
     entPort = gtk_entry_new();
 
-    gtk_table_attach(GTK_TABLE(tblMenu), lblUser, 0, 2, 0, 1, GTK_SHRINK,GTK_SHRINK,0,0);  
-    gtk_table_attach(GTK_TABLE(tblMenu), entUser, 2, 4, 0, 1, GTK_EXPAND,GTK_SHRINK,0,0);  
+    gtk_grid_attach(GTK_GRID(grdMenu), lblUser, 0, 0, 2, 1);  
+    gtk_grid_attach(GTK_GRID(grdMenu), entUser, 2, 0, 2, 1);  
 
-    gtk_table_attach(GTK_TABLE(tblMenu), lblPassword, 0, 2, 1, 2, GTK_SHRINK,GTK_SHRINK,0,0);  
-    gtk_table_attach(GTK_TABLE(tblMenu), entPassword, 2, 4, 1, 2, GTK_EXPAND,GTK_SHRINK,0,0);  
+    gtk_grid_attach(GTK_GRID(grdMenu), lblPassword, 0, 1, 2, 1);  
+    gtk_grid_attach(GTK_GRID(grdMenu), entPassword, 2, 1, 2, 1);  
 
-    gtk_table_attach(GTK_TABLE(tblMenu), lblServer, 0, 1, 2, 3, GTK_SHRINK,GTK_SHRINK,0,0);  
-    gtk_table_attach(GTK_TABLE(tblMenu), entServer, 1, 2, 1, 2, GTK_EXPAND,GTK_SHRINK,0,0);  
-    gtk_table_attach(GTK_TABLE(tblMenu), lblPort, 2, 3, 1, 2, GTK_SHRINK,GTK_SHRINK,0,0);  
-    gtk_table_attach(GTK_TABLE(tblMenu), entPort, 3, 4, 1, 2, GTK_EXPAND,GTK_SHRINK,0,0);  
+    gtk_grid_attach(GTK_GRID(grdMenu), lblServer, 0, 2, 1, 1);  
+    gtk_grid_attach(GTK_GRID(grdMenu), entServer, 1, 2, 1, 1);  
+    gtk_grid_attach(GTK_GRID(grdMenu), lblPort, 2, 2, 1, 1);  
+    gtk_grid_attach(GTK_GRID(grdMenu), entPort, 3, 2, 1, 1);  
 
-    gtk_container_add(GTK_CONTAINER(window), vbxWindow);
+    gtk_container_add(GTK_CONTAINER(window), grdMenu);
    
-    if(access(fifo,F_OK) == -1){
-        if(mkfifo(fifo,0666) != 0){
-            g_print("error creating pipeline\n");
-            gtk_main_quit();
-        }
-    }
-
-
     /* signals connect */
     g_signal_connect(G_OBJECT(window),
                      "delete_event",
@@ -60,7 +51,6 @@ GtkWidget *create_main_window()
 gboolean program_quit(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
     gtk_main_quit();
-    unlink(fifo);
     return TRUE;
 }
 
